@@ -27,6 +27,23 @@ function editekskul($post)
     return mysqli_affected_rows($db);
 }
 
+// Pastikan $db sudah terdefinisi
+function tampildata($query) {
+    global $db;
+
+    $result = mysqli_query($db, $query);
+    if (!$result) {
+        die("Query gagal: " . mysqli_error($db));
+    }
+
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+
 
 // // edit siswa
 // function editsiswa($post)

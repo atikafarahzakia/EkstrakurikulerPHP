@@ -94,17 +94,6 @@ if (isset($_POST['ubah'])) {
                         <label for="formGroupExampleInput" class="form-label">NIP</label>
                         <input type="text" class="form-control" id="formGroupExampleInput" name="nip" value="<?= $guru['nip']; ?>">
                     </div>
-                    <label for="formGroupExampleInput" class="form-label">Ekstrakurikuler</label>
-                    <select class="form-select mb-3" name="ekskul">
-                        <option disabled>PILIH Ekstrakurikuler</option>
-                        <?php
-                        $query = mysqli_query($db, "SELECT nama_ekskul FROM tb_ekskul");
-                        while ($row = mysqli_fetch_assoc($query)) {
-                            $selected = ($row['nama_ekskul'] == $guru['ekskul']) ? 'selected' : '';
-                            echo "<option value='{$row['nama_ekskul']}' $selected>{$row['nama_ekskul']}</option>";
-                        }
-                        ?>
-                    </select>
                     <div class="d-grid">
                         <button type="submit" name="ubah" class="btn btn-success">Simpan Perubahan</button>
                     </div>

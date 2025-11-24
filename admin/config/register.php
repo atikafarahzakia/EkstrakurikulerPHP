@@ -29,12 +29,11 @@ function register_guru($post)
     global $db;
     $nama = $post['nama'];
     $nip = $post['nip'];
-    $ekskul = $post['ekskul'];
 
     $password = password_hash($nip, PASSWORD_DEFAULT);
 
-    $query = "INSERT INTO register_guru (nama_guru, nip, ekskul, password)
-              VALUES ('$nama', '$nip', '$ekskul', '$password')";
+    $query = "INSERT INTO register_guru (nama_guru, nip, password)
+              VALUES ('$nama', '$nip', '$password')";
 
     if (!mysqli_query($db, $query)) {
         echo "SQL ERROR: " . mysqli_error($db);

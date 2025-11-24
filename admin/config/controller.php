@@ -22,20 +22,23 @@ function tampildataguru($query)
 {
     global $db;
     $result = mysqli_query($db, $query);
-    if (!$result) {
-        return [];
-    }
+    if (!$result) return [];
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
+    while ($row = mysqli_fetch_assoc($result)) $rows[] = $row;
     return $rows;
 }
+
 $dataGURU = tampildataguru("
-    SELECT tb_pembina.nama_pembina, tb_pembina.id_pembina, tb_ekskul.nama_ekskul
-    FROM tb_pembina
-    LEFT JOIN tb_ekskul ON tb_pembina.id_ekskul = tb_ekskul.id_ekskul
+    SELECT 
+        p.id_pembina, 
+        p.nama_pembina,
+        GROUP_CONCAT(e.nama_ekskul ORDER BY e.nama_ekskul SEPARATOR ', ') AS nama_ekskul
+    FROM tb_pembina p
+    LEFT JOIN tb_ekskul_pembina ep ON ep.id_pembina = p.id_pembina
+    LEFT JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul
+    GROUP BY p.id_pembina
 ");
+
 
 // fungsi menampilkan data ekskul
 function tampildata_ekskul($query)
@@ -79,36 +82,49 @@ function form_guru($post)
     $id_guru = (int)$post['id_guru'];
     $ekskul_ids = isset($post['ekskul_ids']) ? $post['ekskul_ids'] : [];
 
+    if ($id_guru <= 0 || empty($ekskul_ids)) return 0;
 
-    // (Opsional) Masukkan ke tb_pembina kalau kamu ingin tetap menyimpan nama pembina
-    // Cek apakah sudah ada pembina dengan id_guru ini
+    // Ambil nama guru
+    $rg = mysqli_query($db, "SELECT nama_guru FROM register_guru WHERE id_guru = $id_guru");
+    if (!$rg || mysqli_num_rows($rg) == 0) return 0;
+    $r = mysqli_fetch_assoc($rg);
+    $nama_pembina = mysqli_real_escape_string($db, $r['nama_guru']);
+
+    // Cek pembina sudah ada?
     $cek = mysqli_query($db, "SELECT id_pembina FROM tb_pembina WHERE id_guru = $id_guru");
+
     if (mysqli_num_rows($cek) == 0) {
-        // ambil nama guru
-        $rg = mysqli_query($db, "SELECT nama_guru FROM register_guru WHERE id_guru = $id_guru");
-        $r = mysqli_fetch_assoc($rg);
-        $nama_pembina = mysqli_real_escape_string($db, $r['nama_guru']);
-        mysqli_query($db, "INSERT INTO tb_pembina (nama_pembina, id_ekskul, id_guru) VALUES ('$nama_pembina', NULL, $id_guru)");
-        $id_pembina = mysqli_insert_id($db);
+        // Insert pembina baru
+        $first_ekskul = (int)$ekskul_ids[0];
+        mysqli_query($db, "
+            INSERT INTO tb_pembina (nama_pembina, id_ekskul, id_guru) 
+            VALUES ('$nama_pembina', $first_ekskul, $id_guru)
+        ");
     } else {
+        // Update id_ekskul utama jika ingin
         $row = mysqli_fetch_assoc($cek);
         $id_pembina = $row['id_pembina'];
+        $first_ekskul = (int)$ekskul_ids[0];
+        mysqli_query($db, "UPDATE tb_pembina SET nama_pembina='$nama_pembina', id_ekskul=$first_ekskul WHERE id_pembina = $id_pembina");
     }
 
-    // Simpan relasi ke tb_ekskul_pembina
-    // Hapus relasi lama untuk id_pembina ini (jika ingin replace)
-    mysqli_query($db, "DELETE FROM tb_ekskul_pembina WHERE id_pembina = $id_pembina");
+    // Hapus relasi lama di tb_ekskul_pembina
+    mysqli_query($db, "DELETE FROM tb_ekskul_pembina WHERE id_guru = $id_guru");
 
-
+    // Insert semua relasi baru
     $affected = 0;
     foreach ($ekskul_ids as $ie) {
         $ie = (int)$ie;
-        $res = mysqli_query($db, "INSERT INTO tb_ekskul_pembina (id_ekskul, id_pembina) VALUES ($ie, $id_pembina)");
+        $res = mysqli_query($db, "INSERT INTO tb_ekskul_pembina (id_ekskul, id_guru) VALUES ($ie, $id_guru)");
         if ($res) $affected++;
     }
 
     return $affected;
 }
+
+
+
+
 
 // fungsi form ekskul
 function form_ekskul($post)

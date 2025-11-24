@@ -18,8 +18,9 @@ SELECT e.id_ekskul, e.nama_ekskul, j.hari, j.jam
 FROM tb_ekskul_pembina ep
 JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul
 LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul
-WHERE ep.id_pembina = $id_guru
+WHERE ep.id_guru = $id_guru
 ");
+
 
 
 if (!$query_ekskul) die("Query ekskul gagal: " . mysqli_error($db));
@@ -52,9 +53,6 @@ $ekskul_list[] = $row;
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="ekskul.php">Ekstrakurikuler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dashboard_pembina.php">Pembina/guru</a>
                         </li>
                         <li class="nav-item ms-auto">
                             <a href="login/logout.php" class="btn btn-danger">Logout</a>

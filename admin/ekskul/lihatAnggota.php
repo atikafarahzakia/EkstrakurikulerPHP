@@ -15,11 +15,12 @@ $data_ekskul = mysqli_fetch_assoc($ekskul);
 
 // Ambil daftar anggota
 $query_anggota = mysqli_query($db, "
-    SELECT s.nama_siswa, s.kelas, s.jurusan
-    FROM tb_siswa_ekskul se
-    JOIN tb_siswa s ON s.id_siswa = se.id_siswa
+    SELECT r.nama_siswa, r.kelas, r.jurusan
+    FROM tb_siswa_ekskul se 
+    JOIN register_siswa r ON r.id_siswa = se.id_siswa
     WHERE se.id_ekskul = '$id_ekskul'
 ");
+
 
 if (!$query_anggota) {
     die("Query Error: " . mysqli_error($db));
@@ -79,4 +80,5 @@ if (!$query_anggota) {
         </table>
     </div>
 </body>
+
 </html>

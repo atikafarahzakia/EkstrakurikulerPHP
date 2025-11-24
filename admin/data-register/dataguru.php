@@ -67,7 +67,6 @@ include '../config/app.php';
                         <th scope="col">#</th>
                         <th scope="col">Nama Guru</th>
                         <th scope="col">NIP</th>
-                        <th scope="col">Ekstrakurikuler</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
@@ -78,7 +77,6 @@ include '../config/app.php';
                             <td><?= $no++; ?></td>
                             <td><?= $data['nama_guru']; ?></td>
                             <td><?= $data['nip']; ?></td>
-                            <td><?= $data['ekskul']; ?></td>
                             <td>
                                 <a href="edit/editguru.php?id_guru=<?= $data['id_guru']; ?>" class="btn btn-warning btn-sm">Edit</a>
 

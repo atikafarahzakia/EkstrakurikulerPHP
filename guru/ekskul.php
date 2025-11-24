@@ -16,8 +16,9 @@ $query_ekskul = mysqli_query($db, "
     FROM tb_ekskul_pembina ep
     JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul
     LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul
-    WHERE ep.id_pembina = '$id_guru'
+    WHERE ep.id_guru = '$id_guru'
 ");
+
 
 
 if (!$query_ekskul) die("Query ekskul gagal: " . mysqli_error($db));
@@ -50,9 +51,6 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
                     <li class="nav-item">
                         <a class="nav-link" href="ekskul.php">Ekstrakurikuler</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard_pembina.php">Pembina/guru</a>
-                    </li>
                     <li class="nav-item ms-auto">
                         <a href="login/logout.php" class="btn btn-danger">Logout</a>
                     </li>
@@ -71,7 +69,6 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
                         <th>Nama Ekskul</th>
                         <th>Hari</th>
                         <th>Jam</th>
-                        <th>Lihat Anggota</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -85,10 +82,6 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
                             <td><?= htmlspecialchars($row['nama_ekskul']) ?></td>
                             <td><?= $row['hari'] ? $row['hari'] : '-' ?></td>
                             <td><?= $row['jam'] ? $row['jam'] : '-' ?></td>
-                            <td>
-                                <a href="lihatAnggota.php?id_ekskul=<?= $row['id_ekskul'] ?>" class="btn btn-success btn-sm">Lihat Anggota
-                                </a>
-                            </td>
                             <td>
                                <a href="edit_ekskul.php?id_ekskul=<?= $row['id_ekskul']; ?>" class="btn btn-warning btn-sm">Edit</a>
 

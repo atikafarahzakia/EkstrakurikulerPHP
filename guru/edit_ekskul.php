@@ -8,7 +8,7 @@ if (!isset($_GET['id_ekskul'])) {
 $id = (int)$_GET['id_ekskul'];
 
 // AMBIL DATA EKSUL + JADWAL
-$ekskul = tampildata_ekskul("
+$ekskul = tampildata("
     SELECT 
         tb_ekskul.id_ekskul,
         tb_ekskul.nama_ekskul AS ekskul,
@@ -66,9 +66,6 @@ if (isset($_POST['ubah'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="ekskul.php">Ekstrakurikuler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dashboard_pembina.php">Pembina/guru</a>
                         </li>
                         <li class="nav-item ms-auto">
                             <a href="login/logout.php" class="btn btn-danger">Logout</a>

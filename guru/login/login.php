@@ -7,10 +7,15 @@ if (isset($_POST['login'])) {
     $nama_pembina = trim($_POST['nama_pembina']);
     $nip = trim($_POST['nip']);
 
-    $query = mysqli_query($db, "SELECT * FROM register_guru WHERE nama_guru = '$nama_pembina' LIMIT 1");
+    // Ambil data guru
+    $query = mysqli_query($db, "
+        SELECT * FROM register_guru 
+        WHERE nama_guru = '$nama_pembina'
+        LIMIT 1
+    ");
 
     if (!$query) {
-        die("Query gagal: " . mysqli_error($db));
+        die("Query guru gagal: " . mysqli_error($db));
     }
 
     $data = mysqli_fetch_assoc($query);
@@ -18,9 +23,28 @@ if (isset($_POST['login'])) {
     if ($data) {
         if ($nip == $data['nip']) {
 
-            $_SESSION['id_guru'] = $data['id_guru']; // session utama
+            // SET SESSION
+            $_SESSION['id_guru'] = $data['id_guru'];
             $_SESSION['nama_pembina'] = $data['nama_guru'];
-            $_SESSION['ekskul_pembina'] = $data['ekskul'];
+
+            // AMBIL EKSKUL YANG DIAMPU GURU
+            $qEkskul = mysqli_query($db, "
+                SELECT e.nama_ekskul
+                FROM tb_ekskul_pembina ep
+                JOIN tb_ekskul e ON e.id_ekskul = ep.id_ekskul
+                WHERE ep.id_guru = {$data['id_guru']}
+            ");
+
+            if (!$qEkskul) {
+                die('Query ekskul gagal: ' . mysqli_error($db));
+            }
+
+            $listEks = [];
+            while ($r = mysqli_fetch_assoc($qEkskul)) {
+                $listEks[] = $r['nama_ekskul'];
+            }
+
+            $_SESSION['ekskul_pembina'] = $listEks;
 
             echo "<script>alert('Login Berhasil!'); window.location='../dashboard.php';</script>";
             exit();
@@ -29,11 +53,12 @@ if (isset($_POST['login'])) {
             exit();
         }
     } else {
-        echo "<script>alert('Nama Guru/pembina tidak ditemukan!'); window.location='login.php';</script>";
+        echo "<script>alert('Nama Guru/Pembina tidak ditemukan!'); window.location='login.php';</script>";
         exit();
     }
 }
 ?>
+
 
 
 
@@ -59,7 +84,7 @@ if (isset($_POST['login'])) {
                     </div>
                     <div class="mb-3">
                         <label>NIP</label>
-                        <input type="password" class="form-control" placeholder="Masukan NISN" name="nip" required>
+                        <input type="password" class="form-control" placeholder="Masukan NIP" name="nip" required>
                     </div>
                     <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
                 </form>

@@ -57,11 +57,10 @@ include 'config/app.php';
                     <?php foreach ($data_ekskul as $data): ?>
                         <tr>
                             <td><?= $no++; ?></td>
-                            <td><?= $data['nama_ekskul']; ?></td>
-                            <td><?= $data['nama_pembina']; ?></td>
-                            <td><?= $data['hari']; ?></td>
-                            <td><?= substr($data['jam'], 0, 5); ?></td>
-
+                            <td><?= htmlspecialchars($data['nama_ekskul']); ?></td>
+                            <td><?= htmlspecialchars($data['nama_pembina']); ?></td>
+                            <td><?= htmlspecialchars($data['hari']); ?></td>
+                            <td><?= $data['jam'] != '-' ? substr($data['jam'], 0, 5) : '-'; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

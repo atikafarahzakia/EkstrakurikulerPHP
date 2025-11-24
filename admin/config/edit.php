@@ -20,33 +20,29 @@ function editsiswa($post)
 function editguru($post)
 {
     global $db;
+
     $id_pembina = (int)$post['id_pembina'];
-    $id_guru = isset($post['id_guru']) ? (int)$post['id_guru'] : null;
+    $nama_pembina = isset($post['nama_pembina']) ? mysqli_real_escape_string($db, $post['nama_pembina']) : '';
     $ekskul_ids = isset($post['ekskul_ids']) ? $post['ekskul_ids'] : [];
 
+    // Update nama pembina di tb_pembina
+    $update = mysqli_query($db, "UPDATE tb_pembina SET nama_pembina = '$nama_pembina' WHERE id_pembina = $id_pembina");
 
-    // update tb_pembina jika diperlukan
-    if ($id_guru) {
-        $rg = mysqli_query($db, "SELECT nama_guru FROM register_guru WHERE id_guru = $id_guru");
-        if ($rg && mysqli_num_rows($rg) > 0) {
-            $r = mysqli_fetch_assoc($rg);
-            $nama_pembina = mysqli_real_escape_string($db, $r['nama_guru']);
-            mysqli_query($db, "UPDATE tb_pembina SET nama_pembina = '$nama_pembina', id_guru = $id_guru WHERE id_pembina = $id_pembina");
-        }
-    }
-
-
-    // update relasi tb_ekskul_pembina
+    // Hapus relasi lama di tb_ekskul_pembina
     mysqli_query($db, "DELETE FROM tb_ekskul_pembina WHERE id_pembina = $id_pembina");
+
+    // Insert relasi baru
     $affected = 0;
     foreach ($ekskul_ids as $ie) {
         $ie = (int)$ie;
-        $res = mysqli_query($db, "INSERT INTO tb_ekskul_pembina (id_ekskul, id_pembina) VALUES ($ie, $id_pembina)");
-        if ($res) $affected++;
+        if ($ie > 0) {
+            $res = mysqli_query($db, "INSERT INTO tb_ekskul_pembina (id_ekskul, id_pembina) VALUES ($ie, $id_pembina)");
+            if ($res) $affected++;
+        }
     }
 
-
-    return $affected;
+    // Jika update nama sukses + ada insert relasi baru, return total affected
+    return $affected + ($update ? 1 : 0);
 }
 
 // edit ekskul
@@ -82,10 +78,9 @@ function edit_regisguru($post)
     $id = $post['id_guru'];
     $nama = $post['nama'];
     $nip = $post['nip'];
-    $ekskul = $post['ekskul'];
 
     // query untuk update
-    $query = "UPDATE register_guru SET nama_guru = '$nama', nip = '$nip', ekskul = '$ekskul' WHERE id_guru = $id";
+    $query = "UPDATE register_guru SET nama_guru = '$nama', nip = '$nip' WHERE id_guru = $id";
     mysqli_query($db, $query);
     return mysqli_affected_rows($db);
 }

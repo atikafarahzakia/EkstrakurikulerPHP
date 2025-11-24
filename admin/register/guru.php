@@ -76,17 +76,6 @@ if (isset($_POST['register'])) {
                         <label for="formGroupExampleInput" class="form-label">NIP</label>
                         <input type="text" class="form-control" id="formGroupExampleInput" name="nip">
                     </div>
-                    <label for="formGroupExampleInput" class="form-label">Ekstrakurikuler</label>
-                    <select class="form-select mb-3" aria-label="Default select example" name="ekskul">
-                        <option selected>-
-                            <?php
-                            $query = mysqli_query($db, "SELECT nama_ekskul FROM tb_ekskul");
-                            while ($row = mysqli_fetch_assoc($query)) {
-                                echo "<option value='{$row['nama_ekskul']}'>{$row['nama_ekskul']}</option>";
-                            }
-                            ?>
-                        </option>
-                    </select>
                     <div class="d-grid">
                         <button type="submit" name="register" class="btn btn-success">Buat Akun</button>
                     </div>
