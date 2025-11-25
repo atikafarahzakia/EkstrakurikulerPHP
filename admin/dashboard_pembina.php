@@ -1,29 +1,34 @@
 <?php
-include 'config/app.php';
+include 'config/app.php'; 
 
-$dataGURU = [];
+$dataGURU = []; // Array untuk menampung hasil data guru
+
+// Query untuk menampilkan daftar pembina beserta ekskul yang dibina
 $query = "
     SELECT 
-        p.id_pembina,
-        p.nama_pembina,
-        GROUP_CONCAT(e.nama_ekskul SEPARATOR ', ') AS ekskul_list
+        p.id_pembina,                        -- Ambil ID pembina
+        p.nama_pembina,                      -- Ambil nama pembina
+        GROUP_CONCAT(e.nama_ekskul SEPARATOR ', ') AS ekskul_list  -- Gabungkan nama ekskul menjadi satu baris
     FROM tb_pembina p
-    LEFT JOIN tb_ekskul_pembina ep ON ep.id_guru = p.id_guru
-    LEFT JOIN tb_ekskul e ON e.id_ekskul = ep.id_ekskul
-    GROUP BY p.id_pembina, p.nama_pembina
-    ORDER BY p.id_pembina ASC
+    LEFT JOIN tb_ekskul_pembina ep ON ep.id_guru = p.id_guru       -- Hubungkan pembina dengan tabel penghubung
+    LEFT JOIN tb_ekskul e ON e.id_ekskul = ep.id_ekskul             -- Ambil nama ekskul dari id ekskul
+    GROUP BY p.id_pembina, p.nama_pembina                          -- Grup berdasarkan pembina agar tidak duplikat
+    ORDER BY p.id_pembina ASC                                      -- Urutkan berdasarkan ID dari kecil ke besar
 ";
 
-$result = mysqli_query($db, $query);
+$result = mysqli_query($db, $query); // Eksekusi query
 
+// Validasi jika query gagal
 if (!$result) {
     die("Query gagal: " . mysqli_error($db));
 }
 
+// Simpan hasil query ke array
 while ($row = mysqli_fetch_assoc($result)) {
     $dataGURU[] = $row;
 }
 ?>
+
 
 
 

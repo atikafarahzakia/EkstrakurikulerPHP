@@ -122,10 +122,6 @@ function form_guru($post)
     return $affected;
 }
 
-
-
-
-
 // fungsi form ekskul
 function form_ekskul($post)
 {

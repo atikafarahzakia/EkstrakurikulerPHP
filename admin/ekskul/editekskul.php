@@ -5,9 +5,11 @@ if (!isset($_GET['id_ekskul'])) {
     die("ERROR: id_ekskul tidak ditemukan di URL");
 }
 
+// Mengubah id_ekskul menjadi integer agar aman
 $id = (int)$_GET['id_ekskul'];
 
-// AMBIL DATA EKSUL + JADWAL
+// Fungsi tampildata_ekskul() digunakan untuk mengambil data dari database
+// Query ini mengambil data ekskul + jadwal dengan LEFT JOIN agar jadwal bisa NULL
 $ekskul = tampildata_ekskul("
     SELECT 
         tb_ekskul.id_ekskul,
@@ -15,25 +17,31 @@ $ekskul = tampildata_ekskul("
         tb_jadwal.hari,
         tb_jadwal.jam
     FROM tb_ekskul
-    LEFT JOIN tb_jadwal ON tb_jadwal.id_ekskul = tb_ekskul.id_ekskul
+    LEFT JOIN tb_jadwal 
+        ON tb_jadwal.id_ekskul = tb_ekskul.id_ekskul
     WHERE tb_ekskul.id_ekskul = $id
-")[0];
+")[0]; 
+// [0] karena fungsi tampildata_ekskul mengembalikan array data
 
-// cek apakah tombol simpan ditekan
 if (isset($_POST['ubah'])) {
+
+    // Fungsi editEkskul() menangani proses update ke database
     if (editekskul($_POST) > 0) {
+        // Jika berhasil
         echo "<script>
-            alert('selamat data anda berhasil di simpan');
+            alert('Selamat, data berhasil disimpan');
             document.location.href = '../dashboard_ekskul.php';
-            </script>";
+        </script>";
     } else {
+        // Jika gagal
         echo "<script>
-            alert('data anda gagal di simpan');
+            alert('Data gagal disimpan');
             document.location.href = '../dashboard_ekskul.php';
-            </script>";
+        </script>";
     }
 }
 ?>
+
 
 
 <!doctype html>

@@ -1,36 +1,35 @@
 <?php
 session_start();
-include 'config/app.php';
+include 'config/app.php'; 
 
-
+// Cek apakah user sudah login menggunakan session id_guru
 if (!isset($_SESSION['id_guru'])) {
-header("Location: login/login.php");
-exit();
+    header("Location: login/login.php"); 
+    exit();
 }
 
-
-$id_guru = (int)$_SESSION['id_guru'];
+$id_guru = (int)$_SESSION['id_guru']; 
 $nama_pembina = $_SESSION['nama_pembina'];
 
-
+// Query untuk mengambil ekskul yang dibina oleh guru
 $query_ekskul = mysqli_query($db, "
-SELECT e.id_ekskul, e.nama_ekskul, j.hari, j.jam
-FROM tb_ekskul_pembina ep
-JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul
-LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul
-WHERE ep.id_guru = $id_guru
+    SELECT e.id_ekskul, e.nama_ekskul, j.hari, j.jam
+    FROM tb_ekskul_pembina ep
+    JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul     -- JOIN untuk hubungkan pembina dengan ekskul
+    LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul -- LEFT JOIN agar ekskul tetap tampil walau belum ada jadwal
+    WHERE ep.id_guru = $id_guru
 ");
 
-
-
+// Jika query gagal tampilkan error
 if (!$query_ekskul) die("Query ekskul gagal: " . mysqli_error($db));
 
-
+// Menampung hasil query ke array
 $ekskul_list = [];
 while ($row = mysqli_fetch_assoc($query_ekskul)) {
-$ekskul_list[] = $row;
+    $ekskul_list[] = $row;
 }
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -47,18 +46,18 @@ $ekskul_list[] = $row;
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Ekstrakurikuler SMK7</a>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav w-100">
-                        <li class="nav-item">
-                            <a class="nav-link" href="dashboard.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ekskul.php">Ekstrakurikuler</a>
-                        </li>
-                        <li class="nav-item ms-auto">
-                            <a href="login/logout.php" class="btn btn-danger">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="navbar-nav w-100">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ekskul.php">Ekstrakurikuler</a>
+                    </li>
+                    <li class="nav-item ms-auto">
+                        <a href="login/logout.php" class="btn btn-danger">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 

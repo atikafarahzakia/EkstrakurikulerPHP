@@ -2,22 +2,26 @@
 session_start();
 include '../admin/config/connect.php';
 
+// prosses ketika tombol login di tekan
 if (isset($_POST['login'])) {
 
     $nama_siswa = trim($_POST['nama_siswa']); // hilangkan spasi
     $nisn = trim($_POST['nisn']);
 
-    // Gunakan LIKE untuk mengabaikan huruf besar/kecil
+    // fungsinya untuk mencari data  siswa berdasarkan apa yang di input oleh user
+    //menggunakan limit 1 agar mengambil 1 data aja
     $query = mysqli_query($db, "SELECT * FROM register_siswa WHERE nama_siswa = '$nama_siswa' LIMIT 1");
     if (!$query) {
         die("Query gagal: " . mysqli_error($db));
     }
 
+    // mengambil data dari query yg di atas
     $data = mysqli_fetch_assoc($query);
 
     if ($data) {
+        // ngecek jika nisn sama dengan data yang ada di database
         if ($nisn == $data['nisn']) {
-            // Set session
+            // Jika cocok, set session untuk menyimpan data siswa yang login
             $_SESSION['id_siswa'] = $data['id_siswa'];
             $_SESSION['nama_siswa'] = $data['nama_siswa'];
             $_SESSION['kelas'] = $data['kelas'];

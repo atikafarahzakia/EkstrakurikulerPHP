@@ -2,32 +2,33 @@
 session_start();
 include 'config/app.php';
 
+// Mengecek apakah guru sudah login atau belum
 if (!isset($_SESSION['id_guru'])) {
-    header("Location: login/login.php");
+    header("Location: login/login.php"); // Jika belum login, arahkan ke halaman login
     exit();
 }
 
-$id_guru = $_SESSION['id_guru'];
+$id_guru = $_SESSION['id_guru']; 
 $nama_pembina = $_SESSION['nama_pembina'];
 
-// ambil data ekskul yang dibina guru
+// Query untuk mengambil data ekskul yang dibina oleh guru yang sedang login
 $query_ekskul = mysqli_query($db, "
     SELECT e.id_ekskul, e.nama_ekskul, j.hari, j.jam
     FROM tb_ekskul_pembina ep
-    JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul
-    LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul
-    WHERE ep.id_guru = '$id_guru'
+    JOIN tb_ekskul e ON ep.id_ekskul = e.id_ekskul          -- Mengambil data ekskul yang dibina guru
+    LEFT JOIN tb_jadwal j ON j.id_ekskul = e.id_ekskul      -- Mengambil jadwal ekskul (hari dan jam), tetap muncul meskipun belum ada jadwal
+    WHERE ep.id_guru = '$id_guru'                           -- Filter hanya ekskul yang dibina oleh guru login
 ");
 
-
-
+// Jika query gagal langsung tampilkan pesan error
 if (!$query_ekskul) die("Query ekskul gagal: " . mysqli_error($db));
 
-$ekskul_list = [];
+$ekskul_list = []; // Array untuk menyimpan hasil query
 while ($row = mysqli_fetch_assoc($query_ekskul)) {
-    $ekskul_list[] = $row;
+    $ekskul_list[] = $row; // Simpan setiap baris data ke array
 }
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -83,7 +84,7 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
                             <td><?= $row['hari'] ? $row['hari'] : '-' ?></td>
                             <td><?= $row['jam'] ? $row['jam'] : '-' ?></td>
                             <td>
-                               <a href="edit_ekskul.php?id_ekskul=<?= $row['id_ekskul']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="edit_ekskul.php?id_ekskul=<?= $row['id_ekskul']; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                             </td>
                         </tr>
