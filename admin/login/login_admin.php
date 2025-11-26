@@ -36,7 +36,7 @@ if (isset($_POST['login'])) {
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Login Admin</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -59,7 +59,7 @@ if (isset($_POST['login'])) {
         <div class="d-flex justify-content-center align-items-center vh-100">
             <div class="container bg-white p-4 rounded shadow" style="max-width: 400px;">
                 <h3 class="text-center mb-3">Login Sebagai Admin</h3>
-                <form action="" method="post">
+                <form action="" method="post" autocomplete="off">
                     <div class="mb-3">
                         <label>Username</label>
                         <input type="text" class="form-control" placeholder="Masukan username" name="username">

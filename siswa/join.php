@@ -106,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['daftar'])) {
             <div class="alert alert-info"><?= htmlspecialchars($msg) ?></div>
         <?php endif; ?>
 
-        <div class="bg-light rounded">
-            <h2 class="bg-warning text-dark p-2">Form Pendaftaran Ekstrakurikuler</h2>
+        <div class=" container card p-3 shadow">
+            <h2 class="text-primary p-2">Form Pendaftaran Ekstrakurikuler</h2>
             <form method="POST" action="">
                 <div class="mb-3">
                     <label class="form-label">Nama Siswa</label>

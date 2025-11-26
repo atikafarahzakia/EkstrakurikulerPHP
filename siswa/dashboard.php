@@ -80,10 +80,13 @@ $ekskul_list = tampildata_ekskul("
                         <?php endif; ?>
                     </h4>
 
-                    <?php if (!empty($ekskul['hari'])): ?>
-                        <!-- Menampilkan hari dan jam latihan jika sudah diinput -->
-                        <p class="text-muted mb-0">Hari: <?= htmlspecialchars($ekskul['hari']) ?> | Jam: <?= htmlspecialchars($ekskul['jam']) ?></p>
-                    <?php endif; ?>
+                    <?php 
+$jam_format = date("H:i", strtotime($ekskul['jam']));
+?>
+<p class="text-muted mb-0">
+    Hari: <?= htmlspecialchars($ekskul['hari']) ?> | Jam: <?= $jam_format ?>
+</p>
+
 
                     <table class="table table-bordered table-striped table-hover mt-2">
                         <thead class="table-dark">

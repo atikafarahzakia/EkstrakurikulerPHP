@@ -29,9 +29,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
-
-
-
 <!doctype html>
 <html lang="en">
 
@@ -76,10 +73,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <a href="guru/formguru.php" class="btn btn-success">Tambah data pembina</a>
             </div>
             <h2 class="mt-5">Daftar Pembina</h2>
-            <form class="d-flex mt-2">
+            <!-- <form class="d-flex mt-2">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            </form> -->
             <table class="table table-striped table-hover table-bordered mt-3">
                 <thead class="table-dark">
                     <tr>

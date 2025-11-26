@@ -1,14 +1,14 @@
 <?php
 session_start();
-include 'config/app.php'; 
+include 'config/app.php';
 
 // Cek apakah user sudah login menggunakan session id_guru
 if (!isset($_SESSION['id_guru'])) {
-    header("Location: login/login.php"); 
+    header("Location: login/login.php");
     exit();
 }
 
-$id_guru = (int)$_SESSION['id_guru']; 
+$id_guru = (int)$_SESSION['id_guru'];
 $nama_pembina = $_SESSION['nama_pembina'];
 
 // Query untuk mengambil ekskul yang dibina oleh guru
@@ -66,19 +66,35 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
         <h4 class="mt-4">Ekskul yang Anda Bina</h4>
 
         <?php if (!empty($ekskul_list)): ?>
+            <!-- Mengecek apakah siswa sudah mengikuti ekskul -->
+
             <?php foreach ($ekskul_list as $ekskul):
+                // Mengambil id ekskul yang sedang ditampilkan
                 $id_ekskul = $ekskul['id_ekskul'];
 
+                // Query untuk mengambil semua siswa yang tergabung dalam ekskul ini
                 $query_siswa = mysqli_query($db, "
-                    SELECT s.nama_siswa, s.kelas, s.jurusan
-                    FROM tb_siswa_ekskul se
-                    JOIN tb_siswa s ON se.id_siswa = s.id_siswa
-                    WHERE se.id_ekskul = '$id_ekskul'
-                ");
+            SELECT s.nama_siswa, s.kelas, s.jurusan
+            FROM tb_siswa_ekskul se
+            JOIN tb_siswa s ON se.id_siswa = s.id_siswa
+            WHERE se.id_ekskul = '$id_ekskul'
+        ");
             ?>
+
                 <div class="mt-3 p-4 shadow bg-white rounded">
+                    <!-- Menampilkan nama ekskul -->
                     <h4><?= htmlspecialchars($ekskul['nama_ekskul']) ?></h4>
-                    <p class="text-muted">Hari: <?= $ekskul['hari'] ?> | Jam: <?= $ekskul['jam'] ?></p>
+
+                    <?php
+                    // Format jam dari 12:00:00.000000 menjadi 12:00
+                    $jam_format = date("H:i", strtotime($ekskul['jam']));
+                    ?>
+
+                    <!-- Menampilkan hari dan jam jadwal ekskul -->
+                    <p class="text-muted mb-0">
+                        Hari: <?= htmlspecialchars($ekskul['hari']) ?> | Jam: <?= $jam_format ?>
+                    </p>
+
 
                     <table class="table table-bordered table-striped table-hover mt-3">
                         <thead class="table-dark">

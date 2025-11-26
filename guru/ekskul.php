@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_guru'])) {
     exit();
 }
 
-$id_guru = $_SESSION['id_guru']; 
+$id_guru = $_SESSION['id_guru'];
 $nama_pembina = $_SESSION['nama_pembina'];
 
 // Query untuk mengambil data ekskul yang dibina oleh guru yang sedang login
@@ -82,7 +82,10 @@ while ($row = mysqli_fetch_assoc($query_ekskul)) {
                             <td><?= $no ?></td>
                             <td><?= htmlspecialchars($row['nama_ekskul']) ?></td>
                             <td><?= $row['hari'] ? $row['hari'] : '-' ?></td>
-                            <td><?= $row['jam'] ? $row['jam'] : '-' ?></td>
+                            <td>
+                                <?= $row['jam'] ? date("H:i", strtotime($row['jam'])) : '-' ?>
+                            </td>
+
                             <td>
                                 <a href="edit_ekskul.php?id_ekskul=<?= $row['id_ekskul']; ?>" class="btn btn-warning btn-sm">Edit</a>
 

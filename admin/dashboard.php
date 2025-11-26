@@ -12,12 +12,11 @@ $jumlah_guru   = count(tampildataguru("SELECT * FROM tb_pembina"));
 $jumlah_siswa  = count(tampildatasiswa("SELECT * FROM tb_siswa"));
 ?>
 
-
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>Dashboard </title>
+    <title>Dashboard Admin</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta

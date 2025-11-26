@@ -45,10 +45,10 @@ if (!$query_anggota) {
         <hr>
 
         <a href="../dashboard_ekskul.php" class="btn btn-secondary mb-3">Kembali</a>
-        <form class="d-flex mt-2">
+        <!-- <form class="d-flex mt-2">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        </form> -->
         <table class="table table-bordered table-striped table-hover mt-3">
             <thead class="table-dark">
                 <tr>

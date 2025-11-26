@@ -1,11 +1,11 @@
 <?php
-session_start();
+session_start(); // Memulai session agar data login bisa digunakan
 include '../admin/config/connect.php';
 
 // prosses ketika tombol login di tekan
 if (isset($_POST['login'])) {
 
-    $nama_siswa = trim($_POST['nama_siswa']); // hilangkan spasi
+    $nama_siswa = trim($_POST['nama_siswa']);
     $nisn = trim($_POST['nisn']);
 
     // fungsinya untuk mencari data  siswa berdasarkan apa yang di input oleh user
@@ -51,11 +51,12 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
+    
     <main>
         <div class="d-flex justify-content-center align-items-center vh-100">
             <div class="container bg-white p-4 rounded shadow" style="max-width: 400px;">
                 <h3 class="text-center mb-3">Login Sebagai Siswa</h3>
-                <form action="" method="post">
+                <form action="" method="post" autocomplete="off">
                     <div class="mb-3">
                         <label>Nama Siswa</label>
                         <input type="text" class="form-control" placeholder="Masukan nama siswa" name="nama_siswa" required>

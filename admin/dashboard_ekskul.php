@@ -26,7 +26,7 @@ include 'config/app.php';
     <header>
         <nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">Ekstrakurikuler SMK7</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -63,10 +63,10 @@ include 'config/app.php';
                 <a href="ekskul/formekskul.php" class="btn btn-success">Tambah Ekstrakurikuler</a>
             </div>
             <h2 class="mt-5">Daftar Ekstrakurikuler</h2>
-            <form class="d-flex mt-2" method="GET">
+            <!-- <form class="d-flex mt-2" method="GET">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="cari">
                 <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            </form> -->
             <table class="table table-striped table-hover table-bordered mt-3">
                 <thead class="table-dark">
                     <tr>
